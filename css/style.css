@@ -14,6 +14,7 @@ body{
     background-color: rgb(224, 247, 253);
     min-width: 320px;
     width: 80%;
+    height: 100vh;
     position: relative;
     border-left: 2px solid blue;
     border-right: 2px solid blue;
@@ -41,13 +42,10 @@ body{
     text-align: center;
     padding: 20px;
 }
-.content_sequence{
-    height: 50px;
-}
 .content_button{
     margin: 10px;
     padding: 5px;
-    background-color: rgb(255, 255, 255);
+    background-color: white;
     color: blue;
     border: 2px solid blue;
     font-size: 15px;
@@ -58,4 +56,19 @@ body{
 .content_button:hover {
     background-color: blue;
     color: white;
+}
+
+.content_sequence{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    height: 68px;
+}
+.number{
+    font-size: 20px;
+    color: rgb(224, 247, 253);
+    margin: 10px;
+    padding: 10px;
+    transition-property: color;
+    transition-duration: 4s;
 }

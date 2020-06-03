@@ -1,14 +1,23 @@
-define(['js/Base/Component.js'], 
-function(Component){
+define(['js/Base/Component.js', 'js/Page/Sequence.js'], 
+function(Component, Sequence){
     class Content extends Component {
         render() {
             return `
             <div class="content">
                 <div class="content_int">Нажмите кнопку для генерации списка случайных чисел</div>
                 <button class="content_button" id="button-generate">СГЕНЕРИРОВАТЬ</button>
-                <div class="content_sequence"></div>
+                <div class="content_sequence">
+                    ${this.childrens.create(Sequence,{
+                        condition: 'static'
+                    })}
+                </div>
                 <div class="content_int">для визуализации сортировки нажмите на кнопку</div>
                 <button class="content_button" id="button-visualize">ВИЗУАЛИЗИРОВАТЬ</button>
+                <div class="content_sequence">
+                    ${this.childrens.create(Sequence, {
+                        condition: 'sort'
+                    })}
+                </div>
             </div>`;
         }
     }
