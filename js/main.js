@@ -30,7 +30,29 @@ function(Component, Page) {
         index[i] = i;
     }
 
+    let sort_start = false;
+
+    let timer;
+
     function onButtonGenerateClick(){
+        if (!sort_start){
+            generateNewSequence();
+            button_visualize.addEventListener('click', onButtonVisualizeClick);
+        }
+        else {
+            sort_start = false;
+            clearSequence();
+            //останавливаем таймер
+            clearInterval(timer);
+            //и генерируем новую последовательность
+            generateNewSequence();
+        }
+    }
+
+    /**
+    * генерирует новую случайную последовательность
+    */
+    function generateNewSequence(){
         //получаем случайную последовательность
         for (let i=0;i<10;i++){
             sequence[i]= getRandomNumber(10, 99);
@@ -44,13 +66,28 @@ function(Component, Page) {
         sequence_sort.forEach(number => {
             number.style.color = base_number_color;
         });
+    }
 
-        button_visualize.addEventListener('click', onButtonVisualizeClick);
+    /**
+    * подготавливает страницу к новой последовательности.
+    * зануляет и делает невидимым массивб который предназначен для визуализации сортировки
+    */
+    function clearSequence() {
+        for (let i=0; i<10; i++){
+            sequence[i] = 0;
+            sequence_sort[i].style.background = "none";
+            sequence_sort[i].style.left = "0px";
+            index[i] = i;
+        }
     }
 
     function onButtonVisualizeClick(){
-        //начинаем визуализировать сортировку
-        sort(0,0);
+        //если сортировка не была начата
+        if(!sort_start){
+            //то начинаем
+            sort_start = true;
+            sort(0,0);
+        }
     }
 
     function getRandomNumber(min, max){
@@ -63,7 +100,7 @@ function(Component, Page) {
     */
     function sort(i,j){
         let start = Date.now();
-        let timer = setInterval(function() {
+        timer = setInterval(function() {
             let timePassed = Date.now() - start;
           
             sequence_sort[index[j]].style.color = "black";
