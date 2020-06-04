@@ -4,7 +4,7 @@ define(['js/Base/Component.js', 'js/Page/Page.js'],
 function(Component, Page) {
 
     let background_color = "#c0c0c0";
-    let number_color = "blue";
+    let base_number_color = "blue";
 
     Component.prototype.generateId = function() {
         return Math.random().toString(32).slice(2);
@@ -31,6 +31,7 @@ function(Component, Page) {
     }
 
     function onButtonGenerateClick(){
+        //получаем случайную последовательность
         for (let i=0;i<10;i++){
             sequence[i]= getRandomNumber(10, 99);
             sequence_static[i].innerHTML = sequence[i];
@@ -38,16 +39,17 @@ function(Component, Page) {
         }
 
         sequence_static.forEach(number => {
-            number.style.color = number_color;
+            number.style.color = base_number_color;
         });
         sequence_sort.forEach(number => {
-            number.style.color = number_color;
+            number.style.color = base_number_color;
         });
 
         button_visualize.addEventListener('click', onButtonVisualizeClick);
     }
 
     function onButtonVisualizeClick(){
+        //начинаем визуализировать сортировку
         sort(0,0);
     }
 
@@ -57,6 +59,7 @@ function(Component, Page) {
 
     /**
     * сортировка пузырьком
+    * i,j - идексы массива, элементы которого нужно сравнить
     */
     function sort(i,j){
         let start = Date.now();
@@ -66,12 +69,7 @@ function(Component, Page) {
             sequence_sort[index[j]].style.color = "black";
             sequence_sort[index[j+1]].style.color = "black";
             if (sequence[j] > sequence[j + 1]){
-                let a = window.getComputedStyle(sequence_sort[index[j]]).left;
-                let b = window.getComputedStyle(sequence_sort[index[j+1]]).left;
-                let a2 = Number(a.replace('px',''));
-                let b2 = Number(b.replace('px',''));
-                sequence_sort[index[j]].style.left = a2 + 15 / 50 + 'px';
-                sequence_sort[index[j+1]].style.left = b2 - 15 / 50 + 'px';
+                move(j);
             }
 
             if (timePassed >= 4240) {
@@ -86,24 +84,20 @@ function(Component, Page) {
                 }
 
                 if (i == 9){
-                    sequence_sort[index[j]].style.color = number_color;
-                    sequence_sort[index[j+1]].style.color = number_color;
+                    numberPaintBaseColor(j);
                     sequence_sort[index[j]].style.background = background_color;
                     return;
                 }
 
                 if (j < 8-i){
-                    
-                    sequence_sort[index[j]].style.color = number_color;
-                    sequence_sort[index[j+1]].style.color = number_color;
+                    numberPaintBaseColor(j);
                     j++;
-                    clearInterval(timer); // закончить анимацию через n секунды
+                    clearInterval(timer);
                     sort(i,j);
                 }
                 else {
-                    clearInterval(timer); // закончить анимацию через n секунды
-                    sequence_sort[index[j]].style.color = number_color;
-                    sequence_sort[index[j+1]].style.color = number_color;
+                    clearInterval(timer);
+                    numberPaintBaseColor(j);
                     sequence_sort[index[j+1]].style.background = background_color;
                     j = 0;
                     i++;
@@ -112,5 +106,25 @@ function(Component, Page) {
 
             }
         }, 20);
+    }
+
+    /**
+    * 
+    */
+    function move(j){
+        let currentLeftJ = window.getComputedStyle(sequence_sort[index[j]]).left;
+        let currentLeftJPlusOne = window.getComputedStyle(sequence_sort[index[j+1]]).left;
+        currentLeftJ = Number(currentLeftJ.replace('px',''));
+        currentLeftJPlusOne = Number(currentLeftJPlusOne.replace('px',''));
+        sequence_sort[index[j]].style.left = currentLeftJ + 15 / 50 + 'px';
+        sequence_sort[index[j+1]].style.left = currentLeftJPlusOne - 15 / 50 + 'px';
+    }
+
+    /**
+    * Перекрашивает j и j+1 элементы массива в базовый цвет
+    */
+    function numberPaintBaseColor(j){
+        sequence_sort[index[j]].style.color = base_number_color;
+        sequence_sort[index[j+1]].style.color = base_number_color;
     }
 });
