@@ -15,8 +15,13 @@ function(Component, Page) {
     });
     page.mount(document.body);
 
+    var content_hint = document.getElementsByName('content_hint');
+
+    content_hint[0].style.opacity = "1";
+
     var button_generate = document.getElementById('button-generate');
     button_generate.addEventListener('click', onButtonGenerateClick);
+    button_generate.style.opacity = "1";
 
     var button_visualize = document.getElementById('button-visualize');
 
@@ -35,6 +40,8 @@ function(Component, Page) {
     let timer;
 
     function onButtonGenerateClick(){
+        content_hint[1].style.opacity = "1";
+        button_visualize.style.opacity = "1";
         if (!sort_start){
             generateNewSequence();
             button_visualize.addEventListener('click', onButtonVisualizeClick);
@@ -75,6 +82,7 @@ function(Component, Page) {
     function clearSequence() {
         for (let i=0; i<10; i++){
             sequence[i] = 0;
+            sequence_sort[i].style.transitionDuration = "0s";
             sequence_sort[i].style.background = "none";
             sequence_sort[i].style.left = "0px";
             index[i] = i;
@@ -82,6 +90,9 @@ function(Component, Page) {
     }
 
     function onButtonVisualizeClick(){
+        content_hint[2].style.opacity = "1";
+        content_hint[3].style.opacity = "1";
+        sequence_sort.forEach(number => {number.style.transitionDuration = "2s";});
         //если сортировка не была начата
         if(!sort_start){
             //то начинаем
@@ -140,13 +151,12 @@ function(Component, Page) {
                     i++;
                     sort(i,j);
                 }
-
             }
         }, 20);
     }
 
     /**
-    * 
+    * визуализирует перемещение j и j+1 элементов последовательности
     */
     function move(j){
         let currentLeftJ = window.getComputedStyle(sequence_sort[index[j]]).left;
